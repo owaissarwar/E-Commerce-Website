@@ -1,0 +1,53 @@
+﻿@model E_Commerce_Website.DTO.ProductDto
+
+@{
+        Layout = "_DashboardLayout";
+ 
+}
+<div class="container mt-4">
+    <h2>Add New Product</h2>
+    <hr />
+
+    <form asp-action="AddProduct" method="post" enctype="multipart/form-data">
+        
+        <!-- Product Name -->
+        <div class="form-group mb-3">
+            <label class="form-label">Product Name</label>
+            <input asp-for="ProductName" class="form-control" placeholder="Enter product name" />
+            <span asp-validation-for="ProductName" class="text-danger"></span>
+        </div>
+
+        <!-- Product Price -->
+        <div class="form-group mb-3">
+            <label class="form-label">Product Price</label>
+            <input asp-for="ProductPrice" class="form-control" placeholder="Enter price" />
+            <span asp-validation-for="ProductPrice" class="text-danger"></span>
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="form-group mb-3">
+            <label class="form-label">Category</label>
+            <select asp-for="Cat_Id" class="form-control" asp-items="ViewBag.Categories">
+                <option value="">-- Select Category --</option>
+            </select>
+            <span asp-validation-for="Cat_Id" class="text-danger"></span>
+        </div>
+
+        <!-- Product Description -->
+        <div class="form-group mb-3">
+            <label class="form-label">Description</label>
+            <textarea asp-for="ProductDescription" class="form-control" rows="3" placeholder="Enter product description"></textarea>
+            <span asp-validation-for="ProductDescription" class="text-danger"></span>
+        </div>
+
+        <!-- Product Image -->
+        <div class="form-group mb-3">
+            <label class="form-label">Product Image</label>
+            <input asp-for="ProductIFormImage" class="form-control" type="file" />
+            <span asp-validation-for="ProductIFormImage" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Product</button>
+        <a asp-action="FetchProduct" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>

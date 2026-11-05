@@ -1,0 +1,221 @@
+﻿@model E_Commerce_Website.DTO.CustomerDto
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Spark Admin</title>
+    
+    <link rel="icon" type="image/png" href="~/assets/images/favicon.ico">
+    <link rel="stylesheet" href="~/assets/libs/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/assets/libs/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/assets/libs/apexcharts/apexcharts.css">
+    <link rel="stylesheet" href="~/assets/libs/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" href="~/assets/css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        /* Compact layout to fit screen without scrolling */
+        body, html {
+            height: 100%;
+            overflow-x: hidden;
+        }
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem !important;
+        }
+        .login-card {
+            max-width: 650px !important;
+            width: 100%;
+            padding: 1.5rem 2rem !important;
+        }
+        .login-form-group {
+            margin-bottom: 0.60rem !important;
+        }
+        .login-form-label {
+            margin-bottom: 0.2rem !important;
+            font-size: 0.85rem;
+        }
+        .login-input-group select.login-input {
+            appearance: none;
+            -webkit-appearance: none;
+            background-color: transparent;
+        }
+        .login-input[type="file"] {
+            padding-top: 0.45rem;
+        }
+        .login-input {
+            padding-top: 0.45rem;
+            padding-bottom: 0.45rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-wrapper">
+        <div class="login-card">
+            
+            <!-- Centered Heading -->
+            <div class="text-center mb-3">
+                <h3 class="fw-bold text-dark mb-1">Create Account</h3>
+                <p class="login-subtitle mb-0">Please enter details to register customer</p>
+            </div>
+            
+            <form asp-controller="Account" asp-action="Signup" method="post" enctype="multipart/form-data"> 
+                
+                <!-- Validation Summary -->
+                <div asp-validation-summary="ModelOnly" class="text-danger small mb-2"></div>
+
+                <div class="row g-2">
+                    <!-- Customer Name -->
+                    <div class="col-md-6">
+                        <div class="login-form-group">
+                            <label asp-for="CustomerName" class="login-form-label">Full Name</label>
+                            <div class="login-input-group">
+                                <i class="bi bi-person input-icon"></i>
+                                <input asp-for="CustomerName" class="login-input" placeholder="Owais Sarwar" />
+                            </div>
+                            <span asp-validation-for="CustomerName" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Customer Email -->
+                    <div class="col-md-6">
+                        <div class="login-form-group">
+                            <label asp-for="CustomerEmail" class="login-form-label">Email Address</label>
+                            <div class="login-input-group">
+                                <i class="bi bi-envelope input-icon"></i>
+                                <input asp-for="CustomerEmail" class="login-input" placeholder="name@company.com" />
+                            </div>
+                            <span asp-validation-for="CustomerEmail" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Customer Hash Password -->
+                    <div class="login-form-group">
+    <label asp-for="CustomerHashPassword" class="login-form-label">Password</label>
+    <div class="login-input-group">
+        <i class="bi bi-shield-lock input-icon"></i>
+        <!-- id="customerPassword" lazmi add karein -->
+        <input asp-for="CustomerHashPassword" type="password" id="customerPassword" class="login-input login-input-password" placeholder="••••••••" />
+        
+        <!-- Toggle Button with ID -->
+        <button type="button" class="password-toggle-btn" id="togglePasswordBtn" aria-label="Show password">
+            <i class="bi bi-eye" id="eyeIcon"></i>
+        </button>
+    </div>
+    <span asp-validation-for="CustomerHashPassword" class="text-danger small"></span>
+</div>
+
+                    <!-- Customer Gender -->
+                    <div class="col-md-6">
+                        <div class="login-form-group">
+                            <label asp-for="CustomerGender" class="login-form-label">Gender</label>
+                            <div class="login-input-group">
+                                <i class="bi bi-gender-ambiguous input-icon"></i>
+                                <select asp-for="CustomerGender" class="login-input">
+                                    <option value="" disabled selected>Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <span asp-validation-for="CustomerGender" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Customer City -->
+                    <div class="col-md-6">
+                        <div class="login-form-group">
+                            <label asp-for="CustomerCity" class="login-form-label">City</label>
+                            <div class="login-input-group">
+                                <i class="bi bi-geo-alt input-icon"></i>
+                                <input asp-for="CustomerCity" class="login-input" placeholder="Karachi" />
+                            </div>
+                            <span asp-validation-for="CustomerCity" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Customer Address -->
+                    <div class="col-md-6">
+                        <div class="login-form-group">
+                            <label asp-for="CustomerAddress" class="login-form-label">Address</label>
+                            <div class="login-input-group">
+                                <i class="bi bi-house-door input-icon"></i>
+                                <input asp-for="CustomerAddress" class="login-input" placeholder="Street Address" />
+                            </div>
+                            <span asp-validation-for="CustomerAddress" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <!-- Customer Image File -->
+                    <div class="col-12">
+                        <div class="login-form-group">
+                            <label asp-for="CustomerIFormImage" class="login-form-label">Profile Image (Optional)</label>
+                            <div class="login-input-group">
+                                <i class="bi bi-image input-icon"></i>
+                                <input asp-for="CustomerIFormImage" type="file" class="login-input" accept="image/*" />
+                            </div>
+                            <span asp-validation-for="CustomerIFormImage" class="text-danger small"></span>
+                        </div>
+                        <input type="hidden" asp-for="CustomerRole" value="Customer" />
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-login mt-3" id="btn-submit">
+                    <span>Sign Up Now</span>
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+                
+                <!-- Login Link -->
+                <p class="login-footer-text mt-2 mb-0 text-center">
+                    Already have an account? <a href="~/Account/Login" id="link-login">Sign In</a>
+                </p>
+
+            </form>
+            
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const toggleBtn = document.getElementById("togglePasswordBtn");
+    const passwordInput = document.getElementById("customerPassword");
+    const eyeIcon = document.getElementById("eyeIcon");
+
+    if (toggleBtn && passwordInput && eyeIcon) {
+        toggleBtn.addEventListener("click", function () {
+            // Check current type of input
+            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+
+            // Toggle eye icon class between open and slash (hidden)
+            if (type === "text") {
+                eyeIcon.classList.remove("bi-eye");
+                eyeIcon.classList.add("bi-eye-slash");
+            } else {
+                eyeIcon.classList.remove("bi-eye-slash");
+                eyeIcon.classList.add("bi-eye");
+            }
+        });
+    }
+});
+    </script>
+
+    <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/libs/apexcharts/apexcharts.min.js"></script>
+    <script src="~/assets/libs/flatpickr/flatpickr.min.js"></script>
+    <script src="~/assets/js/auth.js"></script>
+
+</body>
+</html>

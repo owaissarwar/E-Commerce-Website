@@ -1,0 +1,82 @@
+﻿@model E_Commerce_Website.DTO.CustomerDto
+
+@{
+    ViewData["Title"] = "Edit Admin";
+}
+
+<div class="container-fluid px-0">
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-pencil-square me-2"></i>Edit Admin</h5>
+        </div>
+        <div class="card-body p-4">
+            <form asp-controller="Admin" asp-action="EditAdmin" method="post" enctype="multipart/form-data">
+
+                <input type="hidden" asp-for="CustomerId" />
+                <input type="hidden" asp-for="CustTempImage" />
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="CustomerName" class="form-label fw-semibold small">Full Name</label>
+                        <input asp-for="CustomerName" class="form-control form-control-sm" placeholder="Enter full name" />
+                        <span asp-validation-for="CustomerName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="CustomerEmail" class="form-label fw-semibold small">Email Address</label>
+                        <input asp-for="CustomerEmail" class="form-control form-control-sm" placeholder="Enter email address" />
+                        <span asp-validation-for="CustomerEmail" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="CustomerRole" class="form-label fw-semibold small">Role</label>
+                        <select asp-for="CustomerRole" class="form-select form-select-sm">
+                            <option value="Customer">Customer</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                        <span asp-validation-for="CustomerRole" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="CustomerCity" class="form-label fw-semibold small">City</label>
+                        <input asp-for="CustomerCity" class="form-control form-control-sm" placeholder="Enter city" />
+                        <span asp-validation-for="CustomerCity" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="CustomerGender" class="form-label fw-semibold small">Gender</label>
+                        <select asp-for="CustomerGender" class="form-select form-select-sm">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <span asp-validation-for="CustomerGender" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="CustomerAddress" class="form-label fw-semibold small">Address</label>
+                        <textarea asp-for="CustomerAddress" class="form-control form-control-sm" rows="2" placeholder="Enter complete address"></textarea>
+                        <span asp-validation-for="CustomerAddress" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small d-block">Current Profile Image</label>
+                        <img src="~/Upload/@Model.CustTempImage" width="60" height="60" class="object-fit-cover rounded border" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop'" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold small">Upload New Image <span class="text-muted">(Optional)</span></label>
+                        <input type="file" asp-for="CustomerIFormImage" class="form-control form-control-sm" />
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                    <a asp-controller="Admin" asp-action="ManageCustomers" class="btn btn-secondary btn-sm px-3">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-sm px-4">Update</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

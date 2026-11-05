@@ -1,0 +1,40 @@
+﻿@model E_Commerce_Website.Models.Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container mt-4">
+    <h2>Product Details</h2>
+    <hr />
+
+    <div class="row">
+        <!-- Product Image -->
+        <div class="col-md-4">
+            @if (!string.IsNullOrEmpty(Model.ProductImage))
+            {
+                <img src="~/Images/@Model.ProductImage" width="200" height="200" class="img-thumbnail" />
+            }
+            else
+            {
+                <p class="text-muted">No Image Available</p>
+            }
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-8">
+            <h3><strong>Name:</strong> @Model.ProductName</h3>
+            <p><strong>Price:</strong> Rs. @Model.ProductPrice</p>
+            
+            <!-- Category Show Karne ke liye -->
+            <p><strong>Category:</strong> @(Model.Category != null ? Model.Category.CategoryName : "No Category")</p>
+            
+            <p><strong>Description:</strong> @Model.ProductDescription</p>
+
+            <div class="mt-3">
+                <a asp-action="UpdateProduct" asp-route-id="@Model.ProductId" class="btn btn-warning">Edit</a>
+                <a asp-action="FetchProduct" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

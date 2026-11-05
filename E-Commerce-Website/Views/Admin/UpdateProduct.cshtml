@@ -1,0 +1,64 @@
+﻿@model E_Commerce_Website.DTO.ProductDto
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860*@
+@{
+    Layout = "_DashboardLayout";
+}
+
+
+<div class="container mt-4">
+    <h2>Update Product</h2>
+    <hr />
+
+    <form asp-action="UpdateProduct" method="post" enctype="multipart/form-data">
+        
+        <!-- Hidden Field for ID taaki backend ko pata chale -->
+        <input type="hidden" asp-for="ProductId" />
+
+        <!-- Product Name -->
+        <div class="form-group mb-3">
+            <label class="form-label">Product Name</label>
+            <input asp-for="ProductName" class="form-control" />
+            <span asp-validation-for="ProductName" class="text-danger"></span>
+        </div>
+
+        <!-- Product Price -->
+        <div class="form-group mb-3">
+            <label class="form-label">Product Price</label>
+            <input asp-for="ProductPrice" class="form-control" />
+            <span asp-validation-for="ProductPrice" class="text-danger"></span>
+        </div>
+
+        <!-- Category Dropdown -->
+        <div class="form-group mb-3">
+            <label class="form-label">Category</label>
+            <select asp-for="Cat_Id" class="form-control" asp-items="ViewBag.Categories">
+                <option value="">-- Select Category --</option>
+            </select>
+            <span asp-validation-for="Cat_Id" class="text-danger"></span>
+        </div>
+
+        <!-- Product Description -->
+        <div class="form-group mb-3">
+            <label class="form-label">Description</label>
+            <textarea asp-for="ProductDescription" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="ProductDescription" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label">Old Image</label>
+            <img src="~/Images/@Model.ProductTempImage"  width="100" height="100" class="object-fit-cover"/>
+        </div>
+
+
+        <!-- Product Image -->
+        <div class="form-group mb-3">
+            <label class="form-label">Product Image</label>
+            <input asp-for="ProductIFormImage" class="form-control" type="file" />
+        </div>
+
+
+        <button type="submit" class="btn btn-warning">Update Product</button>
+        <a asp-action="FetchProduct" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>
