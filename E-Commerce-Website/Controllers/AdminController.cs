@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace E_Commerce_Website.Controllers
 {
@@ -219,20 +220,44 @@ namespace E_Commerce_Website.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult AddCategory(CategoryDto categoryDto)
         {
-            if (ModelState.IsValid)
+            if (categoryDto.CategoryImageFile == null)
             {
+                ModelState.AddModelError("CategoryImageFile", "Category Image is Required.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(categoryDto);
+            }
+
+            string filename = "";
+            if (categoryDto.CategoryImageFile != null)
+            {
+                var firstpath = Path.Combine(environment.WebRootPath, "CategoryImages");
+                if (!Directory.Exists(firstpath))
+                {
+                    Directory.CreateDirectory(firstpath);
+                }
+                filename = Guid.NewGuid().ToString() + Path.GetExtension(categoryDto.CategoryImageFile.FileName);
+                var combine = Path.Combine(firstpath, filename);
+
+                using (FileStream stream = new FileStream(combine, FileMode.Create))
+                {
+                    categoryDto.CategoryImageFile.CopyTo(stream);
+                }
+
                 Category category = new Category()
                 {
                     CategoryId = Guid.NewGuid(),
-
-                    CategoryName = categoryDto.CategoryName
+                    CategoryName = categoryDto.CategoryName,
+                    CategoryImage = filename
                 };
 
-
-            myDbContext.tbl_category.Add(category);
+                myDbContext.tbl_category.Add(category);
                 myDbContext.SaveChanges();
                 return RedirectToAction(nameof(FetchCategory));
             }
@@ -242,52 +267,82 @@ namespace E_Commerce_Website.Controllers
         [HttpGet]
         public IActionResult UpdateCategory(Guid id)
         {
-          var update =  myDbContext.tbl_category.FirstOrDefault(x => x.CategoryId == id);
-            if(update == null)
+            var update = myDbContext.tbl_category.FirstOrDefault(x => x.CategoryId == id);
+            if (update == null)
             {
                 return NotFound();
-
             }
             CategoryDto categoryDto = new CategoryDto()
             {
                 CategoryId = update.CategoryId,
-                CategoryName = update.CategoryName
-
+                CategoryName = update.CategoryName,
+                TempImage = update.CategoryImage
             };
             return View(categoryDto);
         }
+
         [HttpPost]
         public IActionResult UpdateCategory(CategoryDto categoryDto)
         {
-            if (ModelState.IsValid)
+            var existingCategory = myDbContext.tbl_category.FirstOrDefault(x => x.CategoryId == categoryDto.CategoryId);
+            if (existingCategory == null)
             {
-             var existingCategory =   myDbContext.tbl_category.FirstOrDefault(x => x.CategoryId == categoryDto.CategoryId);
-                if(existingCategory != null)
-                {
-                    existingCategory.CategoryName = categoryDto.CategoryName;
-
-
-                    myDbContext.tbl_category.Update(existingCategory);
-                    myDbContext.SaveChanges();
-                }
-                return RedirectToAction(nameof(FetchCategory));
+                return NotFound();
             }
 
+            if (!ModelState.IsValid)
+            {
+                categoryDto.TempImage = existingCategory.CategoryImage;
+                return View(categoryDto);
+            }
 
-            return View(categoryDto);
+            string filename = existingCategory.CategoryImage;
+
+            if (categoryDto.CategoryImageFile != null)
+            {
+                var firstpath = Path.Combine(environment.WebRootPath, "CategoryImages");
+                if (!Directory.Exists(firstpath))
+                {
+                    Directory.CreateDirectory(firstpath);
+                }
+
+                filename = Guid.NewGuid().ToString() + Path.GetExtension(categoryDto.CategoryImageFile.FileName);
+                var combine = Path.Combine(firstpath, filename);
+
+                using (FileStream stream = new FileStream(combine, FileMode.Create))
+                {
+                    categoryDto.CategoryImageFile.CopyTo(stream);
+                }
+            }
+
+            existingCategory.CategoryName = categoryDto.CategoryName;
+            existingCategory.CategoryImage = filename;
+
+            myDbContext.tbl_category.Update(existingCategory);
+            myDbContext.SaveChanges();
+
+            return RedirectToAction(nameof(FetchCategory));
         }
         public IActionResult DeleteCategory(Guid id)
         {
-          var delete =  myDbContext.tbl_category.FirstOrDefault(x => x.CategoryId == id);
-            if(delete!= null)
+            var delete = myDbContext.tbl_category.FirstOrDefault(x => x.CategoryId == id);
+            if (delete != null)
             {
+                if (!string.IsNullOrEmpty(delete.CategoryImage))
+                {
+                    var imagePath = Path.Combine(environment.WebRootPath, "CategoryImages", delete.CategoryImage);
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                }
+
                 myDbContext.Remove(delete);
                 myDbContext.SaveChanges();
                 return RedirectToAction(nameof(FetchCategory));
             }
-            return View(delete);
+            return RedirectToAction(nameof(FetchCategory));
         }
-
         public IActionResult FetchProduct()
         {
           var products =  myDbContext.tbl_product.ToList();

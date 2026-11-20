@@ -4,16 +4,33 @@
 }
 
 <div class="container mt-4">
-    <h2>Add New Category</h2>
+    <h2>Edit Category</h2>
     <hr />
 
-    <form asp-controller="Admin" asp-action="UpdateCategory" method="post">
+    <form asp-controller="Admin" asp-action="UpdateCategory" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="CategoryId" />
+
         <div class="form-group mb-3">
             <label class="form-label">Category Name</label>
-            <input  type="hidden" asp-for="CategoryId"/>
             <input asp-for="CategoryName" class="form-control" placeholder="Enter category name (e.g. Shoes, Clothes)" />
             <span asp-validation-for="CategoryName" class="text-danger"></span>
         </div>
+
+        <div class="form-group mb-3">
+            <label class="form-label">Category Image</label>
+            <input asp-for="CategoryImageFile" type="file" class="form-control" />
+            <span asp-validation-for="CategoryImageFile" class="text-danger"></span>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model?.TempImage))
+        {
+            <div class="mb-3">
+                <label class="form-label">Current Image</label>
+                <div>
+                    <img src="~/CategoryImages/@Model.TempImage" alt="Category Image" style="width: 70px; height: 70px; object-fit: cover;" />
+                </div>
+            </div>
+        }
 
         <button type="submit" class="btn btn-primary">Edit Category</button>
         <a asp-action="fetchCategory" class="btn btn-secondary">Back to List</a>

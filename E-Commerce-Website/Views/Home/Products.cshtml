@@ -1,0 +1,58 @@
+﻿@model IEnumerable<E_Commerce_Website.Models.Product>
+@{
+    ViewData["Title"] = "Products";
+}
+
+<main id="main-content">
+    <section class="section section-muted">
+        <div class="container">
+            <div class="section-heading">
+                <h1>All Products</h1>
+                <a class="section-link" asp-controller="Home" asp-action="Index">Back to Home</a>
+            </div>
+
+            <div class="row g-3 g-md-4">
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var prod in Model)
+                    {
+                        <div class="col-6 col-md-4 col-xl-3">
+                            <article class="product-card">
+                                <div class="product-media">
+                                    <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@prod.ProductId">
+                                        @if (!string.IsNullOrEmpty(prod.ProductImage))
+                                        {
+                                            <img src="~/Images/@prod.ProductImage" alt="@prod.ProductName" loading="lazy">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/User_assets/images/products/headphones.jpg" alt="@prod.ProductName" loading="lazy">
+                                        }
+                                    </a>
+                                    <a class="wishlist-btn" asp-controller="Home" asp-action="Wishlist" asp-route-id="@prod.ProductId" aria-label="View wishlist">
+                                        <i class="bi bi-heart" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                                <div class="product-body">
+                                    <h3 class="product-name">
+                                        <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@prod.ProductId">@prod.ProductName</a>
+                                    </h3>
+                                    <p class="mb-0">
+                                        <span class="price-current">Rs. @prod.ProductPrice</span>
+                                    </p>
+                                    <a class="btn-add-cart" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@prod.ProductId">Add to Cart</a>
+                                </div>
+                            </article>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12">
+                        <p class="text-muted">No products found.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+</main>

@@ -1,50 +1,214 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - E_Commerce_Website</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/E_Commerce_Website.styles.css" asp-append-version="true" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShopNest | Home</title>
+  <meta name="description" content="ShopNest is a modern online store for electronics, fashion, gaming, and home essentials.">
+  <link rel="icon" href="~/User_assets/images/logo/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="~/User_assets/css/style.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">E_Commerce_Website</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="site-header">
+    <div class="top-header">
+      <div class="container">
+        <div class="top-header-row">
+          <div class="top-header-contact">
+            <a href="tel:+922112345678"><i class="bi bi-telephone" aria-hidden="true"></i>+92 21 1234 5678</a>
+            <a href="mailto:hello@shopnest.pk"><i class="bi bi-envelope" aria-hidden="true"></i>hello@shopnest.pk</a>
+          </div>
+          <p class="top-header-promo">Free delivery on orders over Rs. 5,000</p>
+          
+          <div class="user-auth-section">
+            @{
+                var customerName = Context.Session.GetString("CustomerName");
+                var customerRole = Context.Session.GetString("Role");
+                var customerImage = Context.Session.GetString("CustomerImage");
+            }
+
+          @if (!string.IsNullOrEmpty(customerName) && customerRole == "Customer")
+{
+    <!-- Jab user login hoga, tab yeh dikhega -->
+    <div class="dropdown d-inline-block">
+        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle text-white fw-semibold" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            @if (!string.IsNullOrEmpty(customerImage))
+            {
+                <img src="~/Upload/@customerImage" alt="Profile" class="rounded-circle me-2 border border-2 border-white" width="35" height="35" style="object-fit: cover;" />
+            }
+            else
+            {
+                <i class="bi bi-person-circle fs-4 me-2 text-white"></i>
+            }
+            <span class="text-white">@customerName</span>
+        </a>
+        
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown" style="z-index: 1050;">
+            <li>
+                <a class="dropdown-item text-dark fw-normal py-2" asp-controller="Home" asp-action="Profile">
+                    <i class="bi bi-person me-2"></i>My Profile
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item text-dark fw-normal py-2" asp-controller="Cart" asp-action="Index">
+                    <i class="bi bi-bag me-2"></i>My Cart
+                </a>
+            </li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <li>
+                <a class="dropdown-item text-danger fw-semibold py-2" asp-controller="Account" asp-action="Logout">
+                    <i class="bi bi-box-arrow-right me-2"></i>Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+}
+else
+{
+    <!-- Jab user login NAHI hoga, tab Sign In / Sign Up dikhega -->
+    <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light btn-sm me-2">Sign In</a>
+    <a asp-controller="Account" asp-action="Signup" class="btn btn-success btn-sm">Sign Up</a>
+}
+          </div>
+        </div>
+      </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - E_Commerce_Website - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <div class="main-header">
+      <div class="container">
+        <div class="main-header-row">
+          <a class="brand" asp-controller="Home" asp-action="Index">
+            <img src="~/User_assets/images/logo/logo.svg" alt="" width="40" height="40">
+            <span>ShopNest</span>
+          </a>
+          <form class="search-form" asp-controller="Home" asp-action="Products" method="get" role="search">
+            <label class="visually-hidden" for="search">Search products</label>
+            <input type="search" id="search" name="Search" placeholder="Search products">
+            <button type="submit">Search</button>
+          </form>
+          <div class="header-actions">
+            <a class="header-icon" href="#" aria-label="Account">
+              <i class="bi bi-person" aria-hidden="true"></i>
+            </a>
+            <a class="header-icon" asp-controller="Home" asp-action="Wishlist" aria-label="Wishlist">
+              <i class="bi bi-heart" aria-hidden="true"></i>
+              <span class="icon-badge">3</span>
+            </a>
+            <a class="header-icon" asp-controller="Cart" asp-action="Index" aria-label="Shopping cart">
+              <i class="bi bi-bag" aria-hidden="true"></i>
+              <span class="icon-badge">2</span>
+            </a>
+          </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+      </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg main-nav" aria-label="Main">
+      <div class="container">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link @(currentAction == "Index" ? "active" : "")"
+                   aria-current="@(currentAction == "Index" ? "page" : null)"
+                   asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @(currentAction == "About" ? "active" : "")"
+                   aria-current="@(currentAction == "About" ? "page" : null)"
+                   asp-controller="Home" asp-action="About">About Us</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @(currentAction == "Products" ? "active" : "")"
+                   aria-current="@(currentAction == "Products" ? "page" : null)"
+                   asp-controller="Home" asp-action="Products">Products</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @(currentAction == "Category" ? "active" : "")"
+                   aria-current="@(currentAction == "Category" ? "page" : null)"
+                   asp-controller="Home" asp-action="Category">Categories</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link @(currentAction == "Contact" ? "active" : "")"
+                   aria-current="@(currentAction == "Contact" ? "page" : null)"
+                   asp-controller="Home" asp-action="Contact">Contact Us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content">
+      @RenderBody()
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-12 col-md-6 col-lg-4">
+          <a class="footer-brand" asp-controller="Home" asp-action="Index">
+            <img src="~/User_assets/images/logo/logo.svg" alt="" width="36" height="36">
+            ShopNest
+          </a>
+          <p>An online store for electronics, fashion, gaming, and home essentials, with clear prices in Pakistani Rupees.</p>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h2>Shop</h2>
+          <ul class="footer-links">
+            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li><a asp-controller="Home" asp-action="Products">Products</a></li>
+            <li><a asp-controller="Home" asp-action="Category">Categories</a></li>
+            <li><a asp-controller="Home" asp-action="About">About Us</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-lg-2">
+          <h2>Help</h2>
+          <ul class="footer-links">
+            <li><a asp-controller="Home" asp-action="Contact">Contact Us</a></li>
+            <li><a asp-controller="Cart" asp-action="Index">Cart</a></li>
+            <li><a asp-controller="Home" asp-action="Wishlist">Wishlist</a></li>
+          </ul>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4">
+          <h2>Contact</h2>
+          <ul class="footer-links">
+            <li>12-B, Commercial Lane, DHA Phase 6, Karachi</li>
+            <li><a href="tel:+922112345678">+92 21 1234 5678</a></li>
+            <li><a href="mailto:hello@shopnest.pk">hello@shopnest.pk</a></li>
+            <li>Mon–Sat, 9:00 AM – 9:00 PM</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 ShopNest. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" type="button" aria-label="Back to top">
+    <i class="bi bi-chevron-up" aria-hidden="true"></i>
+  </button>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="~/User_assets/js/script.js"></script>
+  @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

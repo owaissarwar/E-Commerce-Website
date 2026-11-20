@@ -1,0 +1,35 @@
+﻿@model IEnumerable<E_Commerce_Website.Models.Product>
+
+@{
+    ViewData["Title"] = "All Products";
+}
+
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">All Products</h2>
+
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 col-sm-6">
+                <div class="card h-100 shadow-sm">
+                    <img src="~/Images/@(item.ProductImage ?? "default.png")"
+                         class="card-img-top"
+                         height="200"
+                         style="object-fit: cover;"
+                         alt="@item.ProductName" />
+
+                    <div class="card-body d-flex flex-column">
+                        <span class="badge bg-secondary mb-2 align-self-start">@item.Category?.CategoryName</span>
+                        <h6 class="card-title fw-bold">@item.ProductName</h6>
+                        <p class="text-primary fw-semibold mb-3">Rs. @item.ProductPrice</p>
+
+                        <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId"
+                           class="btn btn-sm btn-outline-primary mt-auto">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

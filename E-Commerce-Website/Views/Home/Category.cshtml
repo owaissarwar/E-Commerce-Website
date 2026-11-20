@@ -1,0 +1,57 @@
+﻿@model IEnumerable<E_Commerce_Website.Models.Category>
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<main id="main-content">
+    <section class="section section-muted">
+        <div class="container">
+            <div class="section-heading">
+                <h1>Categories</h1>
+                <a class="section-link" asp-controller="Home" asp-action="Products">All Products</a>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <!-- Filter Pills / Quick Category Buttons -->
+                <div class="d-flex flex-wrap gap-2 mb-4" role="group" aria-label="Category filters">
+                    <a asp-controller="Home" asp-action="Products" class="btn btn-dark rounded-pill px-3 py-2">
+                        All
+                    </a>
+                    @foreach (var cat in Model)
+                    {
+                        <a asp-controller="Home" asp-action="CategoryProducts" asp-route-id="@cat.CategoryId"
+                           class="btn btn-outline-dark rounded-pill px-3 py-2">
+                            @cat.CategoryName
+                        </a>
+                    }
+                </div>
+
+                <!-- Category Cards Grid -->
+                <div class="row g-3 g-md-4">
+                    @foreach (var category in Model)
+                    {
+                        <div class="col-6 col-md-4 col-lg-3">
+                            <a class="category-card d-block text-decoration-none"
+                               asp-controller="Home" asp-action="CategoryProducts" asp-route-id="@category.CategoryId">
+                                @if (!string.IsNullOrEmpty(category.CategoryImage))
+                                {
+                                    <img src="~/CategoryImages/@category.CategoryImage" alt="@category.CategoryName" loading="lazy">
+                                }
+                                else
+                                {
+                                    <img src="~/User_assets/images/products/headphones.jpg" alt="@category.CategoryName" loading="lazy">
+                                }
+                                <div class="mt-2 fw-semibold">@category.CategoryName</div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No categories found.</p>
+            }
+        </div>
+    </section>
+</main>

@@ -1,0 +1,111 @@
+﻿@model E_Commerce_Website.Models.Product
+@{
+    ViewData["Title"] = Model.ProductName;
+    var relatedProducts = ViewBag.RelatedProducts as List<E_Commerce_Website.Models.Product>;
+}
+
+<main id="main-content">
+    <section class="section section-muted">
+        <div class="container">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-controller="Home" asp-action="Products">Products</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.ProductName</li>
+                </ol>
+            </nav>
+
+            <div class="row g-4 g-lg-5 align-items-start">
+                <!-- Product Image -->
+                <div class="col-12 col-md-6">
+                    <div class="border rounded bg-white p-3 text-center">
+                        @if (!string.IsNullOrEmpty(Model.ProductImage))
+                        {
+                            <img src="~/Images/@Model.ProductImage" alt="@Model.ProductName" class="img-fluid rounded" style="max-height: 420px; object-fit: contain;" />
+                        }
+                        else
+                        {
+                            <img src="~/User_assets/images/products/headphones.jpg" alt="@Model.ProductName" class="img-fluid rounded" style="max-height: 420px; object-fit: contain;" />
+                        }
+                    </div>
+                </div>
+
+                <!-- Product Info -->
+                <div class="col-12 col-md-6">
+                    @if (Model.Category != null)
+                    {
+                        <span class="badge bg-secondary mb-2">@Model.Category.CategoryName</span>
+                    }
+
+                    <h1 class="h2 fw-bold mb-3">@Model.ProductName</h1>
+
+                    <p class="fs-4 fw-semibold mb-3">
+                        <span class="price-current">Rs. @Model.ProductPrice</span>
+                    </p>
+
+                    @if (!string.IsNullOrEmpty(Model.ProductDescription))
+                    {
+                        <p class="text-muted mb-4">@Model.ProductDescription</p>
+                    }
+
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+                        <a class="btn btn-primary px-4 py-2" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@Model.ProductId">
+                            <i class="bi bi-bag-plus me-1"></i> Add to Cart
+                        </a>
+                        <a class="btn btn-outline-secondary px-4 py-2" asp-controller="Home" asp-action="Products">
+                            Back to Products
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Products -->
+    @if (relatedProducts != null && relatedProducts.Any())
+    {
+        <section class="section">
+            <div class="container">
+                <div class="section-heading">
+                    <h2>Related Products</h2>
+                    <a class="section-link" asp-controller="Home" asp-action="Products">View all</a>
+                </div>
+
+                <div class="row g-3 g-md-4">
+                    @foreach (var rel in relatedProducts)
+                    {
+                        <div class="col-6 col-md-4 col-xl-3">
+                            <article class="product-card">
+                                <div class="product-media">
+                                    <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@rel.ProductId">
+                                        @if (!string.IsNullOrEmpty(rel.ProductImage))
+                                        {
+                                            <img src="~/Images/@rel.ProductImage" alt="@rel.ProductName" loading="lazy" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/User_assets/images/products/headphones.jpg" alt="@rel.ProductName" loading="lazy" />
+                                        }
+                                    </a>
+                                </div>
+                                <div class="product-body">
+                                    <h3 class="product-name">
+                                        <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@rel.ProductId">@rel.ProductName</a>
+                                    </h3>
+                                    <p class="mb-0">
+                                        <span class="price-current">Rs. @rel.ProductPrice</span>
+                                    </p>
+                                    <a class="btn-add-cart" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@rel.ProductId">Add to Cart</a>
+                                </div>
+                            </article>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    }
+</main>

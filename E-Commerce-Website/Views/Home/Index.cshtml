@@ -1,9 +1,220 @@
-﻿@{
+﻿@model E_Commerce_Website.Models.HomeViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
+@if (TempData["Login"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+        <strong>Success!</strong> @TempData["Login"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+<main id="main-content">
+    <section class="hero-section section section-muted">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-3">
+                    <button class="category-toggle d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#categoryMenu" aria-expanded="false" aria-controls="categoryMenu">
+                        Browse Categories
+                        <i class="bi bi-chevron-down" aria-hidden="true"></i>
+                    </button>
+                    <aside class="category-panel collapse d-lg-block" id="categoryMenu">
+                        <p class="category-title d-none d-lg-block">Browse Categories</p>
+                        <ul class="category-menu list-unstyled mb-0">
+                            @if (Model?.Categories != null)
+                            {
+                                @foreach (var cat in Model.Categories)
+                                {
+                                    <li>
+                                        <a asp-controller="Home" asp-action="CategoryProducts" asp-route-id="@cat.CategoryId">
+                                            <i class="bi bi-tag" aria-hidden="true"></i>
+                                            <span>@cat.CategoryName</span>
+                                        </a>
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </aside>
+                </div>
+                <div class="col-lg-9">
+                    <div id="homeCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="hero-slide">
+                                    <div class="hero-copy">
+                                        <p class="kicker">Limited offer</p>
+                                        <h1>Clear sound for every day</h1>
+                                        <p>Save 15% on selected headphones this week.</p>
+                                        <a class="btn-accent" asp-controller="Home" asp-action="Products">Shop Now</a>
+                                    </div>
+                                    <div class="hero-media">
+                                        <img src="~/User_assets/images/banners/banner-audio.jpg" alt="Headphones with a metal ear cup and leather band">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="hero-slide">
+                                    <div class="hero-copy">
+                                        <p class="kicker">New arrivals</p>
+                                        <h2>Fresh styles for the season</h2>
+                                        <p>Shirts, bags, and clothing chosen for everyday wear.</p>
+                                        <a class="btn-accent" asp-controller="Home" asp-action="Products">Shop Now</a>
+                                    </div>
+                                    <div class="hero-media">
+                                        <img src="~/User_assets/images/banners/banner-fashion.jpg" alt="Clothing hanging on wooden hangers">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="hero-slide">
+                                    <div class="hero-copy">
+                                        <p class="kicker">For the home</p>
+                                        <h2>Make the kitchen easier</h2>
+                                        <p>Coffee makers and home appliances, ready to ship.</p>
+                                        <a class="btn-accent" asp-controller="Home" asp-action="Products">Shop Now</a>
+                                    </div>
+                                    <div class="hero-media">
+                                        <img src="~/User_assets/images/banners/banner-home.jpg" alt="A bright kitchen with cookware on the counter">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="text-center">
-    <h1 class="display-4">Ecommerce Website</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-x`<a></a>
+    <section class="section" aria-label="Store benefits">
+        <div class="container">
+            <div class="row g-3">
+                <div class="col-6 col-lg-3">
+                    <article class="feature-card">
+                        <div class="feature-icon"><i class="bi bi-truck" aria-hidden="true"></i></div>
+                        <h3>Free Shipping</h3>
+                        <p>On orders above Rs. 5,000.</p>
+                    </article>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <article class="feature-card">
+                        <div class="feature-icon"><i class="bi bi-arrow-repeat" aria-hidden="true"></i></div>
+                        <h3>Easy Returns</h3>
+                        <p>7-day returns on eligible items.</p>
+                    </article>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <article class="feature-card">
+                        <div class="feature-icon"><i class="bi bi-tag" aria-hidden="true"></i></div>
+                        <h3>Special Discounts</h3>
+                        <p>Weekly offers across categories.</p>
+                    </article>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <article class="feature-card">
+                        <div class="feature-icon"><i class="bi bi-headset" aria-hidden="true"></i></div>
+                        <h3>Customer Support</h3>
+                        <p>Help every day, 9am to 9pm.</p>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-muted" aria-labelledby="featured-heading">
+        <div class="container">
+            <div class="section-heading">
+                <h2 id="featured-heading">Featured Products</h2>
+                <a class="section-link" asp-controller="Home" asp-action="Products">View all</a>
+            </div>
+            <div class="row g-3 g-md-4">
+                @if (Model?.Products != null)
+                {
+                    @foreach (var prod in Model.Products)
+                    {
+                        <div class="col-6 col-md-4 col-xl-3">
+                            <article class="product-card">
+                                <div class="product-media">
+                                    <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@prod.ProductId">
+                                        @if (!string.IsNullOrEmpty(prod.ProductImage))
+                                        {
+                                            <img src="~/Images/@prod.ProductImage" alt="@prod.ProductName" loading="lazy">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/User_assets/images/products/headphones.jpg" alt="@prod.ProductName" loading="lazy">
+                                        }
+                                    </a>
+                                    <a class="wishlist-btn" asp-controller="Home" asp-action="Wishlist" asp-route-id="@prod.ProductId" aria-label="View wishlist">
+                                        <i class="bi bi-heart" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                                <div class="product-body">
+                                    <h3 class="product-name">
+                                        <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@prod.ProductId">@prod.ProductName</a>
+                                    </h3>
+                                    <p class="mb-0">
+                                        <span class="price-current">Rs. @prod.ProductPrice</span>
+                                    </p>
+                                    <a class="btn-add-cart" asp-controller="Product" asp-action="Checkout" asp-route-id="@prod.ProductId">Add to Cart</a>
+                                </div>
+                            </article>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <section class="section" aria-labelledby="category-heading">
+        <div class="container">
+            <div class="section-heading">
+                <h2 id="category-heading">Shop by Category</h2>
+                <a class="section-link" asp-controller="Home" asp-action="Products">Browse all products</a>
+            </div>
+
+            <div class="row g-3 g-md-4">
+                @if (Model?.Categories != null)
+                {
+                    foreach (var category in Model.Categories)
+                    {
+                        <div class="col-6 col-md-4">
+                            <a class="category-card" asp-controller="Home" asp-action="CategoryProducts" asp-route-id="@category.CategoryId">
+                                <img src="~/CategoryImages/@category.CategoryImage" alt="@category.CategoryName" loading="lazy">
+                                <span>@category.CategoryName</span>
+                            </a>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-muted" aria-label="Sale">
+        <div class="container">
+            <div class="promo-banner">
+                <div class="promo-copy">
+                    <p class="kicker">Season sale</p>
+                    <h2>Save on audio this month</h2>
+                    <p>Selected headphones are 15% off while the offer lasts.</p>
+                    <a class="btn-accent" asp-controller="Home" asp-action="Products">Shop Now</a>
+                </div>
+                <div class="promo-media">
+                    <img src="~/User_assets/images/products/headphones.jpg" alt="Black wireless headphones" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

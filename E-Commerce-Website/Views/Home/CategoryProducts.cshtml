@@ -1,0 +1,96 @@
+﻿@model IEnumerable<E_Commerce_Website.Models.Product>
+@{
+    var categories = ViewBag.Categories as IEnumerable<E_Commerce_Website.Models.Category> ?? Enumerable.Empty<E_Commerce_Website.Models.Category>();
+    Guid? selectedCategoryId = ViewBag.SelectedCategoryId as Guid?;
+    ViewData["Title"] = ViewBag.CategoryName ?? "Category Products";
+}
+
+<main id="main-content">
+    <section class="section section-muted">
+        <div class="container">
+            <div class="section-heading">
+                <h1>@(ViewBag.CategoryName ?? "Category Products")</h1>
+                <a class="section-link" asp-controller="Home" asp-action="Products">All Products</a>
+            </div>
+
+            <!-- Dropdown + Filter Pills (Saari Categories hamesha show hongi) -->
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+                <div class="d-flex flex-wrap gap-2" role="group" aria-label="Category filters">
+                    <a asp-controller="Home" asp-action="Products" class="btn btn-outline-dark rounded-pill px-3 py-2">
+                        All
+                    </a>
+                    @foreach (var cat in categories)
+                    {
+                        var isActive = selectedCategoryId.HasValue && selectedCategoryId.Value == cat.CategoryId;
+                        <a asp-controller="Home" asp-action="CategoryProducts" asp-route-id="@cat.CategoryId"
+                           class="btn @(isActive ? "btn-dark" : "btn-outline-dark") rounded-pill px-3 py-2">
+                            @cat.CategoryName
+                        </a>
+                    }
+                </div>
+
+                <div style="min-width: 220px;">
+                    <select id="categoryDropdown" class="form-select" aria-label="Select Category"
+                            onchange="if (this.value) window.location.href = this.value;">
+                        <option value="@Url.Action("Products", "Home")">All Categories</option>
+                        @foreach (var cat in categories)
+                        {
+                            var url = Url.Action("CategoryProducts", "Home", new { id = cat.CategoryId });
+                            if (selectedCategoryId.HasValue && selectedCategoryId.Value == cat.CategoryId)
+                            {
+                                <option value="@url" selected>@cat.CategoryName</option>
+                            }
+                            else
+                            {
+                                <option value="@url">@cat.CategoryName</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="row g-3 g-md-4">
+                @if (Model != null && Model.Any())
+                {
+                    @foreach (var prod in Model)
+                    {
+                        <div class="col-6 col-md-4 col-xl-3">
+                            <article class="product-card">
+                                <div class="product-media">
+                                    <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@prod.ProductId">
+                                        @if (!string.IsNullOrEmpty(prod.ProductImage))
+                                        {
+                                            <img src="~/Images/@prod.ProductImage" alt="@prod.ProductName" loading="lazy">
+                                        }
+                                        else
+                                        {
+                                            <img src="~/User_assets/images/products/headphones.jpg" alt="@prod.ProductName" loading="lazy">
+                                        }
+                                    </a>
+                                    <a class="wishlist-btn" asp-controller="Home" asp-action="Wishlist" asp-route-id="@prod.ProductId" aria-label="View wishlist">
+                                        <i class="bi bi-heart" aria-hidden="true"></i>
+                                    </a>
+                                </div>
+                                <div class="product-body">
+                                    <h3 class="product-name">
+                                        <a asp-controller="Home" asp-action="ProductDetails" asp-route-id="@prod.ProductId">@prod.ProductName</a>
+                                    </h3>
+                                    <p class="mb-0">
+                                        <span class="price-current">Rs. @prod.ProductPrice</span>
+                                    </p>
+                                    <a class="btn-add-cart" asp-controller="Cart" asp-action="AddToCart" asp-route-id="@prod.ProductId">Add to Cart</a>
+                                </div>
+                            </article>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12">
+                        <p class="text-muted">Is category mein abhi koi product nahi hai.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+</main>

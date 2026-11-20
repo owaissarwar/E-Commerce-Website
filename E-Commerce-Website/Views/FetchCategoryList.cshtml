@@ -1,0 +1,14 @@
+﻿@model List<E_Commerce_Website.Models.Category>
+
+@if (Model != null)
+{
+    @foreach (var cat in Model)
+    {
+        <li>
+            <a asp-controller="Home" asp-action="Category" asp-route-id="@cat.CategoryId">
+                <i class="bi bi-tag" aria-hidden="true"></i>
+                <span>@cat.CategoryName</span>
+            </a>
+        </li>
+    }
+}

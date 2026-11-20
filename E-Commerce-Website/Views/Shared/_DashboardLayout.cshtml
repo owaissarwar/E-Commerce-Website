@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var adminName = Context.Session.GetString("CustomerName");
+    var adminImage = Context.Session.GetString("CustomerImage");
+}
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -20,69 +24,69 @@
 
     <link rel="stylesheet" href="~/assets/css/main.css">
     <style>
-        /* Page shifting/sliding ko rokne ke liye clean CSS */
-        html {
-            overflow-y: scroll !important; /* Scrollbar ko hamesha visible rakhta hai taaki shift na ho */
-            box-sizing: border-box;
-        }
-
-        *, *:before, *:after {
-            box-sizing: inherit;
-        }
-
-        body {
-            display: flex;
-            min-height: 100vh;
-            flex-direction: column;
-            margin: 0;
-            background-color: #f8f9fa;
-            overflow-x: hidden !important; /* Horizontal scroll ko khatam karne ke liye */
-        }
-
-        /* Fixed Sidebar Alignment with Dark Theme preserved */
-        .sidebar-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 280px;
-            height: 100vh;
-            z-index: 1050;
-            overflow-y: auto;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        /* Main Content Wrapper - Sidebar ke liye space chhodne ke liye */
-        .main-content-wrapper {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            min-height: 100vh;
-            margin-left: 0;
-            width: 100%;
-        }
-
-        @@media (min-width: 992px) {
-            .main-content-wrapper {
-                margin-left: 280px;
-                width: calc(100% - 280px);
+            /* Page shifting/sliding ko rokne ke liye clean CSS */
+            html {
+                overflow-y: scroll !important;
+                box-sizing: border-box;
             }
-        }
 
-        /* Mobile responsive sidebar handling */
-        @@media (max-width: 991.98px) {
+            *, *:before, *:after {
+                box-sizing: inherit;
+            }
+
+            body {
+                display: flex;
+                min-height: 100vh;
+                flex-direction: column;
+                margin: 0;
+                background-color: #f8f9fa;
+                overflow-x: hidden !important;
+            }
+
+            /* Fixed Sidebar Alignment with Dark Theme preserved */
             .sidebar-wrapper {
-                transform: translateX(-100%); /* Mobile par shuru mein chhupi hogi */
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 280px;
+                height: 100vh;
+                z-index: 1050;
+                overflow-y: auto;
+                transition: transform 0.3s ease-in-out;
             }
-            .sidebar-wrapper.sidebar-open {
-                transform: translateX(0); /* Toggle button dabane par samne aa jayegi */
+
+            /* Main Content Wrapper - Sidebar ke liye space chhodne ke liye */
+            .main-content-wrapper {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                min-height: 100vh;
+                margin-left: 0;
+                width: 100%;
             }
-        }
 
-        /* Footer Alignment at Bottom */
-        .footer-custom {
-            margin-top: auto;
-        }
+            @@media (min-width: 992px) {
+                .main-content-wrapper {
+                    margin-left: 280px;
+                    width: calc(100% - 280px);
+                }
+            }
 
+            /* Mobile responsive sidebar handling */
+            @@media (max-width: 991.98px) {
+                .sidebar-wrapper {
+                    transform: translateX(-100%);
+                }
+
+                    .sidebar-wrapper.sidebar-open {
+                        transform: translateX(0);
+                    }
+            }
+
+            /* Footer Alignment at Bottom */
+            .footer-custom {
+                margin-top: auto;
+            }
     </style>
 </head>
 
@@ -115,21 +119,17 @@
                 <div class="sidebar-menu-title">Components</div>
                 <ul class="sidebar-menu-list">
                     <li class="sidebar-menu-item">
-                    <a asp-controller="Admin" asp-action="AdminPage" class="sidebar-menu-link" title="Home">
-
+                        <a asp-controller="Admin" asp-action="AdminPage" class="sidebar-menu-link" title="Home">
                             <i class="bi bi-table"></i>
                             <span>Home</span>
                         </a>
                     </li>
-                    <!-- Staff / Admin List Link -->
                     <li class="sidebar-menu-item">
                         <a asp-controller="Admin" asp-action="ManageAdmins" class="sidebar-menu-link" title="Staff and Admins">
                             <i class="bi bi-person-badge"></i>
                             <span>Staff / Admins</span>
                         </a>
                     </li>
-
-                    <!-- Customer List Link -->
                     <li class="sidebar-menu-item">
                         <a asp-controller="Admin" asp-action="ManageCustomers" class="sidebar-menu-link" title="Customer List">
                             <i class="bi bi-people"></i>
@@ -149,13 +149,13 @@
                         </a>
                     </li>
                     <li class="sidebar-menu-item">
-                        <a href="ui-buttons.html" class="sidebar-menu-link" title="Cart">
+                        <a href="#" class="sidebar-menu-link" title="Cart">
                             <i class="bi bi-menu-button-wide-fill"></i>
                             <span>Cart</span>
                         </a>
                     </li>
                     <li class="sidebar-menu-item">
-                        <a href="ui-buttons.html" class="sidebar-menu-link" title="Order">
+                        <a href="#" class="sidebar-menu-link" title="Order">
                             <i class="bi bi-menu-button-wide-fill"></i>
                             <span>Order</span>
                         </a>
@@ -166,50 +166,53 @@
 
         <!-- Sidebar Profile Card -->
         <div class="sidebar-profile">
-            <img src="~/assets/images/avatar.png" alt="Administrator" class="sidebar-profile-img"
-                 onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop'">
+            <img src="~/Upload/@adminImage" alt="Administrator" class="sidebar-profile-img">
             <div class="sidebar-profile-info">
-                <div class="sidebar-profile-name">Administrator</div>
-                <div class="sidebar-profile-email">admin@email.com</div>
+                <div class="sidebar-profile-name">@adminName</div>
+                <div class="sidebar-profile-email">Administrator</div>
             </div>
         </div>
     </div>
     <!-- END: Sidebar Component -->
-
     <!-- START: Main Content Area -->
     <main class="main-content-wrapper">
         <!-- Top Header Bar with Profile Dropdown -->
         <header class="navbar navbar-expand px-4 py-2 border-bottom bg-white justify-content-between justify-content-lg-end">
-            
-            <!-- Toggle Menu Icon Button (Only shows on mobile / small screen) -->
+
+            <!-- Toggle Menu Icon Button -->
             <button class="btn btn-outline-secondary d-lg-none btn-sm" type="button" id="sidebarToggle">
                 <i class="bi bi-list fs-5"></i>
             </button>
 
             <div class="dropdown ms-2">
-                <button class="navbar-profile-btn dropdown-toggle btn d-flex align-items-center gap-2 border-0 bg-transparent" type="button" data-bs-toggle="dropdown"
+                <button class="navbar-profile-btn dropdown-toggle btn d-flex align-items-center gap-2 border-0 bg-transparent"
+                        type="button" data-bs-toggle="dropdown"
                         aria-expanded="false" id="profile-dropdown">
-                    <img src="~/assets/images/avatar.png" alt="Profile Image" class="navbar-profile-img rounded-circle" width="32" height="32" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop'">
-                    <span class="navbar-profile-name d-none d-md-inline fw-semibold">Administrator</span>
+
+                    <img src="~/Upload/@adminImage" alt="Profile Image"
+                         class="navbar-profile-img rounded-circle"
+                         width="32" height="32">
+
+                    <span class="navbar-profile-name d-none d-md-inline fw-semibold">
+                        @adminName
+                    </span>
+
                     <i class="bi bi-chevron-down navbar-profile-caret small"></i>
                 </button>
-               <ul class="dropdown-menu dropdown-menu-end dropdown-menu-profile shadow-sm" aria-labelledby="profile-dropdown">
-    <li class="dropdown-header text-muted small">Welcome !</li>
-    
-    <!-- Yahan Controller aur Action set kar diya gaya hai -->
-    <li>
-        <a class="dropdown-item" asp-controller="Admin" asp-action="ManageAdmins">
-            <i class="bi bi-person me-2"></i> My Account
-        </a>
-    </li>
-
-    <li><hr class="dropdown-divider"></li>
-    <li>
-        <a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">
-            <i class="bi bi-box-arrow-right me-2"></i> Logout
-        </a>
-    </li>
-</ul>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-profile shadow-sm" aria-labelledby="profile-dropdown">
+                    <li class="dropdown-header text-muted small">Welcome !</li>
+                    <li>
+                        <a class="dropdown-item" asp-controller="Admin" asp-action="ManageAdmins">
+                            <i class="bi bi-person me-2"></i> My Account
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">
+                            <i class="bi bi-box-arrow-right me-2"></i> Logout
+                        </a>
+                    </li>
+                </ul>
             </div>
         </header>
 
@@ -219,17 +222,17 @@
         </div>
 
         <footer class="footer-custom">
-    <div class="footer-left">
-        <span class="footer-logo">
-            <i class="bi bi-asterisk"></i> Spark Admin
-        </span>
-        <span class="footer-separator">|</span>
-        <span class="footer-copy">&copy; 2026 Spark Admin. All rights reserved.</span>
-    </div>
-    <div class="footer-right">
-        <a href="#" class="footer-link">Support</a>
-    </div>
-</footer>
+            <div class="footer-left">
+                <span class="footer-logo">
+                    <i class="bi bi-asterisk"></i> Spark Admin
+                </span>
+                <span class="footer-separator">|</span>
+                <span class="footer-copy">&copy; 2026 Spark Admin. All rights reserved.</span>
+            </div>
+            <div class="footer-right">
+                <a href="#" class="footer-link">Support</a>
+            </div>
+        </footer>
     </main>
 
     <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -239,9 +242,9 @@
 
     <!-- Script for Mobile Sidebar Toggle -->
     <script>
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            document.getElementById('sidebar').classList.toggle('sidebar-open');
-        });
+            document.getElementById('sidebarToggle').addEventListener('click', function () {
+                document.getElementById('sidebar').classList.toggle('sidebar-open');
+            });
     </script>
 </body>
 

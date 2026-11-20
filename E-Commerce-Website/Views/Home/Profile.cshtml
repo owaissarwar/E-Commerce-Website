@@ -1,0 +1,101 @@
+﻿@model E_Commerce_Website.DTO.CustomerDto
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<main id="main-content">
+    <section class="section section-muted">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-3">
+                        <div class="card-body p-4 p-md-5">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h1 class="h3 fw-bold mb-0">Edit Profile</h1>
+                                <a class="btn btn-outline-secondary btn-sm" asp-controller="Home" asp-action="Index">Back to Home</a>
+                            </div>
+
+                            <form asp-controller="Home" asp-action="Profile" method="post" enctype="multipart/form-data">
+                                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                                <!-- Hidden fields taaki ID, purani image aur role safe rahein -->
+                                <input type="hidden" asp-for="CustomerId" />
+                                <input type="hidden" asp-for="CustTempImage" />
+                                <input type="hidden" asp-for="CustomerRole" />
+                                <input type="hidden" asp-for="CustomerHashPassword" />
+
+                                <!-- Current Profile Picture Preview -->
+                                <div class="mb-4 text-center">
+                                    @if (!string.IsNullOrEmpty(Model.CustTempImage) && Model.CustTempImage != "default.png")
+                                    {
+                                        <img src="~/Upload/@Model.CustTempImage" alt="@Model.CustomerName" class="rounded-circle border mb-2" style="width: 110px; height: 110px; object-fit: cover;" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/User_assets/images/products/headphones.jpg" alt="@Model.CustomerName" class="rounded-circle border mb-2" style="width: 110px; height: 110px; object-fit: cover;" />
+                                    }
+                                    <div class="mt-2 text-start">
+                                        <label asp-for="CustomerIFormImage" class="form-label fw-semibold">Profile Picture</label>
+                                        <input asp-for="CustomerIFormImage" type="file" accept="image/*" class="form-control" />
+                                        <span asp-validation-for="CustomerIFormImage" class="text-danger small"></span>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3">
+                                    <!-- Full Name -->
+                                    <div class="col-12 col-md-6">
+                                        <label asp-for="CustomerName" class="form-label fw-semibold">Full Name</label>
+                                        <input asp-for="CustomerName" type="text" class="form-control" placeholder="Enter your name" />
+                                        <span asp-validation-for="CustomerName" class="text-danger small"></span>
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="col-12 col-md-6">
+                                        <label asp-for="CustomerEmail" class="form-label fw-semibold">Email Address</label>
+                                        <input asp-for="CustomerEmail" type="email" class="form-control" placeholder="Enter your email" />
+                                        <span asp-validation-for="CustomerEmail" class="text-danger small"></span>
+                                    </div>
+
+                                    <!-- Gender -->
+                                    <div class="col-12 col-md-6">
+                                        <label asp-for="CustomerGender" class="form-label fw-semibold">Gender</label>
+                                        <select asp-for="CustomerGender" class="form-select">
+                                            <option value="">-- Select Gender --</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                        <span asp-validation-for="CustomerGender" class="text-danger small"></span>
+                                    </div>
+
+                                    <!-- City -->
+                                    <div class="col-12 col-md-6">
+                                        <label asp-for="CustomerCity" class="form-label fw-semibold">City</label>
+                                        <input asp-for="CustomerCity" type="text" class="form-control" placeholder="Enter your city" />
+                                        <span asp-validation-for="CustomerCity" class="text-danger small"></span>
+                                    </div>
+
+                                    <!-- Address -->
+                                    <div class="col-12">
+                                        <label asp-for="CustomerAddress" class="form-label fw-semibold">Address</label>
+                                        <textarea asp-for="CustomerAddress" rows="3" class="form-control" placeholder="Enter complete shipping address"></textarea>
+                                        <span asp-validation-for="CustomerAddress" class="text-danger small"></span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary px-4 py-2">Save Changes</button>
+                                    <a asp-controller="Home" asp-action="Index" class="btn btn-light border px-4 py-2">Cancel</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

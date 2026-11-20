@@ -9,7 +9,7 @@ namespace E_Commerce_Website.Controllers
     {
         private readonly MyDbContext Context;
         private readonly IWebHostEnvironment webHostEnvironment;
-
+        
         public AccountController(MyDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             Context = context;
@@ -28,8 +28,7 @@ namespace E_Commerce_Website.Controllers
                 }
                 else if (role == "Customer")
                 {
-                    return RedirectToAction("Home", "User");
-
+                    return RedirectToAction("Index", "Home");
                 }
             }
 
@@ -90,16 +89,17 @@ namespace E_Commerce_Website.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-          var role =  HttpContext.Session.GetString("Role");
+            var role = HttpContext.Session.GetString("Role");
+            
             if (!string.IsNullOrEmpty(role))
             {
-                if(role == "Admin")
+                if (role == "Admin")
                 {
                     return RedirectToAction("AdminPage", "Admin");
-                }else if(role == "Customer")
+                }
+                else if (role == "Customer")
                 {
-                    return RedirectToAction("Home", "User");
-
+                    return RedirectToAction("Index", "Home");
                 }
             }
             return View();
@@ -115,8 +115,11 @@ namespace E_Commerce_Website.Controllers
             if (customer != null && BCrypt.Net.BCrypt.Verify(CustomerHashPassword, customer.CustomerPassword))
             {
                 HttpContext.Session.SetString("CustomerName", customer.CustomerName);
+                HttpContext.Session.SetString("CustomerId", customer.CustomerId.ToString());
                 HttpContext.Session.SetString("Role", customer.CustomerRole);
+                HttpContext.Session.SetString("CustomerImage", customer.CustomerImage ?? "default.png");
 
+                TempData["Login"] = "Login Successfully!";
 
                 if (string.Equals(customer.CustomerRole?.Trim(), "Admin", StringComparison.OrdinalIgnoreCase))
                 {
@@ -124,20 +127,22 @@ namespace E_Commerce_Website.Controllers
                 }
                 else if (string.Equals(customer.CustomerRole?.Trim(), "Customer", StringComparison.OrdinalIgnoreCase))
                 {
-                    return RedirectToAction("Home", "User");
+                    return RedirectToAction("Index", "Home");
                 }
             }
 
             ModelState.AddModelError(string.Empty, "Invalid Email or Password!");
             return View();
         }
+
         [HttpGet]
         public IActionResult Logout()
         {
-             HttpContext.Session.Clear();
+            HttpContext.Session.Clear();
 
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Index", "Home");
         }
+
         public IActionResult AccessDenied()
         {
             return View();

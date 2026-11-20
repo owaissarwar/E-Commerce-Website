@@ -1,0 +1,91 @@
+﻿@model E_Commerce_Website.Models.Product
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">Checkout / Order Confirmation</h2>
+
+    <div class="row g-5">
+
+        <!-- Left Side: Shipping & Payment Form -->
+        <div class="col-md-7">
+            <div class="card shadow-sm border-0 p-4">
+                <h4 class="mb-3 text-primary">Shipping Information</h4>
+
+                <form asp-controller="Product" asp-action="PlaceOrder" method="post">
+                    <input type="hidden" name="ProductId" value="@Model.ProductId" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Full Name</label>
+                        <input type="text" name="FullName" class="form-control" placeholder="Enter your full name" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Phone Number</label>
+                        <input type="text" name="Phone" class="form-control" placeholder="03XXXXXXXXX" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Delivery Address</label>
+                        <textarea name="Address" class="form-control" rows="3" placeholder="House #, Street, City" required></textarea>
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <h4 class="mb-3 text-primary">Payment Method</h4>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="radio" name="PaymentMethod" id="cod" value="COD" checked>
+                        <label class="form-check-label fw-semibold" for="cod">
+                            Cash on Delivery (COD)
+                        </label>
+                    </div>
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-check-circle me-2"></i>Place Order
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Side: Order Summary -->
+        <div class="col-md-5">
+            <div class="card shadow-sm border-0 p-4 bg-light">
+                <h4 class="mb-3 text-secondary">Order Summary</h4>
+
+                <div class="d-flex align-items-center mb-3">
+                    <img src="~/Images/@(string.IsNullOrEmpty(Model.ProductImage) ? "default.png" : Model.ProductImage)"
+                         class="rounded border me-3"
+                         width="80" height="80"
+                         style="object-fit: cover;" />
+                    <div>
+                        <h6 class="fw-bold mb-1">@Model.ProductName</h6>
+                        <span class="badge bg-secondary">@Model.Category?.CategoryName</span>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Price:</span>
+                    <span class="fw-semibold">Rs. @Model.ProductPrice</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Shipping:</span>
+                    <span class="text-success fw-semibold">Free</span>
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between mb-3">
+                    <h5 class="fw-bold">Total Amount:</h5>
+                    <h5 class="text-primary fw-bold">Rs. @Model.ProductPrice</h5>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
