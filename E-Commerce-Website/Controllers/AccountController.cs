@@ -127,6 +127,13 @@ namespace E_Commerce_Website.Controllers
                 }
                 else if (string.Equals(customer.CustomerRole?.Trim(), "Customer", StringComparison.OrdinalIgnoreCase))
                 {
+                    var pendingProductId = HttpContext.Session.GetString("PendingProductId");
+                    if (!string.IsNullOrEmpty(pendingProductId))
+                    {
+                        HttpContext.Session.Remove("PendingProductId");
+                        return RedirectToAction("Checkout", "Product", new { id = Guid.Parse(pendingProductId) });
+                    }
+
                     return RedirectToAction("Index", "Home");
                 }
             }
@@ -134,7 +141,6 @@ namespace E_Commerce_Website.Controllers
             ModelState.AddModelError(string.Empty, "Invalid Email or Password!");
             return View();
         }
-
         [HttpGet]
         public IActionResult Logout()
         {
